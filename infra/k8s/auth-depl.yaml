@@ -6,15 +6,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth-depl
+      app: auth
   template:
     metadata:
       labels:
-        app: auth-depl
+        app: auth
     spec:
       containers:
-        - name: auth-depl
-          image: <Image>
+        - name: auth
+          image: wesleyclements/auth
           resources:
             limits:
               memory: "128Mi"
