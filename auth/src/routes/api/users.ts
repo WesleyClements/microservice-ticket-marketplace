@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 
+import { ErrorCollection } from '../../middleware/errorHandler';
+
 const router = Router();
 
 router.get('/currentuser', (req, res) => {
@@ -16,7 +18,7 @@ router.post(
   (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      throw ErrorCollection.fromValidationErrors(errors.array());
     }
     const { email, password } = req.body;
 
