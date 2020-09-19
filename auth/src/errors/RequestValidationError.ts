@@ -9,5 +9,6 @@ export class RequestValidationError extends StandardizedError {
       400,
       ...errors.map(({ msg, param, location }) => ({ message: msg as string, param, location }))
     );
+    Object.setPrototypeOf(this, RequestValidationError.prototype);
   }
 }

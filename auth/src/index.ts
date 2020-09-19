@@ -9,8 +9,6 @@ const app = express();
 
 app.use(json());
 
-app.use();
-
 app.use('/', require('@routes').router);
 
 app.use(errorHandler);
