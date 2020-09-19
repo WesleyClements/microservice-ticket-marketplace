@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 
+import { MongoError } from 'mongodb';
 import { BadRequestError, RequestValidationError } from '@errors';
 
 import { User } from '@db';
@@ -28,7 +29,7 @@ router.post(
       const result = await User.create({ email, password });
       res.status(201).json({ id: result._id });
     } catch (err) {
-      if (/E11000/i.test(err.message)) {
+      if (err instanceof MongoError && err.code === 11000) {
         throw new BadRequestError('Email in use');
       }
       throw new Error('Internal Error');
