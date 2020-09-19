@@ -12,3 +12,5 @@ mongoose
   .catch((err) => {
     console.error(err);
   });
+
+export { User } from './models/User';
