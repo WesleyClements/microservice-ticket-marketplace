@@ -1,7 +1,7 @@
 import express from 'express';
 import { json } from 'body-parser';
 
-import { errorHandler } from './middleware/errorHandler';
+import { errorHandler } from '@middleware/errorHandler';
 
 const PORT = 3000;
 
@@ -9,7 +9,9 @@ const app = express();
 
 app.use(json());
 
-app.use('/', require('./routes').router);
+app.use();
+
+app.use('/', require('@routes').router);
 
 app.use(errorHandler);
 
