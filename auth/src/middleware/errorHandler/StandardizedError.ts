@@ -1,12 +1,12 @@
 import { ValidationError } from 'express-validator';
 
-export interface SubError {
+export interface ErrorItem {
   message: string;
 }
 
-export class ErrorCollection extends Error {
+export class StandardizedError extends Error {
   static fromValidationErrors(errors: ValidationError[]) {
-    return new ErrorCollection(
+    return new StandardizedError(
       'Invalid data',
       400,
       ...errors.map(({ msg, param, location }) => ({ message: msg as string, param, location }))
@@ -14,14 +14,14 @@ export class ErrorCollection extends Error {
   }
 
   status: number;
-  errors: SubError[];
+  errors: ErrorItem[];
 
-  constructor(message: string, status: number, ...errors: SubError[]) {
+  constructor(message: string, status: number, ...errors: ErrorItem[]) {
     super(message);
 
     this.errors = errors;
     this.status = status;
 
-    Object.setPrototypeOf(this, ErrorCollection.prototype);
+    Object.setPrototypeOf(this, StandardizedError.prototype);
   }
 }

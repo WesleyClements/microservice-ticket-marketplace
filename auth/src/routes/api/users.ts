@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 
-import { ErrorCollection } from '../../middleware/errorHandler';
+import { StandardizedError } from '../../middleware/errorHandler';
 
 const router = Router();
 
@@ -18,7 +18,7 @@ router.post(
   (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      throw ErrorCollection.fromValidationErrors(errors.array());
+      throw StandardizedError.fromValidationErrors(errors.array());
     }
     const { email, password } = req.body;
 

@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import { ErrorCollection } from './ErrorCollection';
+import { StandardizedError } from './StandardizedError';
 
-export { ErrorCollection };
+export { StandardizedError };
 
-export const errorHandler = (err: ErrorCollection | Error, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (err: StandardizedError | Error, req: Request, res: Response, next: NextFunction) => {
   console.log('Something went wrong', err);
 
-  if (err instanceof ErrorCollection) {
+  if (err instanceof StandardizedError) {
     res.status(err.status);
 
     res.send({
