@@ -1,6 +1,8 @@
 import express from 'express';
 import { json } from 'body-parser';
 
+import '@db';
+
 import { errorHandler } from '@middleware/errorHandler';
 
 const PORT = 3000;
