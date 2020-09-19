@@ -50,6 +50,7 @@
     "paths": {
       "@db": ["./db"],
       "@db/*": ["./db/*"],
+      "@errors": ["./errors"],
       "@errors/*": ["./errors/*"],
       "@middleware/*": ["./middleware/*"]
     },
