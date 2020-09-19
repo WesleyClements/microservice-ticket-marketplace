@@ -9,7 +9,7 @@ const app = express();
 
 app.use(json());
 
-app.use('/', require('@routes').router);
+app.use('/', require('./routes').router);
 
 app.use(errorHandler);
 
