@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
 
 import { MongoError } from 'mongodb';
 import { BadRequestError, RequestValidationError } from '@errors';
@@ -26,8 +27,12 @@ router.post(
     const { email, password } = req.body;
 
     try {
-      const result = await User.create({ email, password });
-      res.status(201).json({ id: result._id });
+      const user = await User.create({ email, password });
+      req.session = {
+        jwt: jwt.sign({ id: user.id, email: user.email }, process.env.JWT_KEY!),
+      };
+
+      res.status(201).json(user);
     } catch (err) {
       if (err instanceof MongoError && err.code === 11000) {
         throw new BadRequestError('Email in use');
