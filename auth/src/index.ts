@@ -4,7 +4,7 @@ import cookieSession from 'cookie-session';
 
 import '@db';
 
-import { errorHandler } from '@middleware/errorHandler';
+import { errorHandler } from '@middleware';
 
 const PORT = 3000;
 
