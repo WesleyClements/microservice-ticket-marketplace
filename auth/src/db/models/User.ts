@@ -11,17 +11,29 @@ interface IUserDocument extends Document {
 
 interface IUserModel extends Model<IUserDocument> {}
 
-const userSchema = new Schema<IUserDocument>({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+const userSchema = new Schema<IUserDocument>(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    toJSON: {
+      versionKey: false,
+      virtuals: true,
+      transform: (doc, ret) => {
+        delete ret._id;
+        delete ret.password;
+      },
+    },
+  }
+);
 
 userSchema.pre('save', async function () {
   const user = this as IUserDocument;
