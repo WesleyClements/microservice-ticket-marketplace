@@ -8,6 +8,10 @@ import { errorHandler } from '@middleware/errorHandler';
 
 const PORT = 3000;
 
+if (!process.env.JWT_KEY) {
+  throw new Error('JWT_KEY must be defined');
+}
+
 const app = express();
 
 app.set('trust proxy', true);
