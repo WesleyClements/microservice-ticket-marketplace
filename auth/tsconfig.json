@@ -52,6 +52,7 @@
       "@db/*": ["./db/*"],
       "@errors": ["./errors"],
       "@errors/*": ["./errors/*"],
+      "@middleware": ["./middleware"],
       "@middleware/*": ["./middleware/*"]
     },
     /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
