@@ -15,6 +15,7 @@ app.set('trust proxy', true);
 app.use(json());
 app.use(
   cookieSession({
+    keys: ['jwt'],
     signed: false,
     secure: true,
   })
