@@ -20,7 +20,7 @@ router.post(
   '/signup',
   [
     body('email').isEmail().withMessage('email must be valid'),
-    body('password').trim().isLength({ min: 6 }).withMessage('eassword must be more than 6 characters'),
+    body('password').trim().isLength({ min: 6 }).withMessage('password must be more than 6 characters'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
