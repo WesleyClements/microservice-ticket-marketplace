@@ -12,13 +12,7 @@ import { User } from '@db';
 const router = Router();
 
 router.get('/currentuser', (req, res) => {
-  try {
-    if (req.session?.jwt) {
-      const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!);
-      return res.send({ currentUser: payload });
-    }
-  } catch (err) {}
-  res.send({ currentUser: null });
+  return res.send({ currentUser: req.currentUser || null });
 });
 
 router.post(
