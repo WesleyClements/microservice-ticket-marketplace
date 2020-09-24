@@ -74,6 +74,9 @@ router.post(
   }
 );
 
-router.post('/signout', (req, res) => {});
+router.post('/signout', (req, res) => {
+  req.session = null;
+  res.status(200).end();
+});
 
 export { router };
