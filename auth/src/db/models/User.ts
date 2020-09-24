@@ -8,6 +8,7 @@ const defaultUserRole = 0;
 export type UserRole = typeof userRoles[number];
 
 interface IUserDocument extends Document {
+  role: UserRole;
   email: string;
   password: string;
   comparePassword: (password: string) => Promise<boolean>;
