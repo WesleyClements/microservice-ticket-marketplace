@@ -12,16 +12,13 @@ import { User } from '@db';
 const router = Router();
 
 router.get('/currentuser', (req, res) => {
-  if (!req.session?.jwt) {
-    return res.send({ currentUser: null });
-  }
   try {
-    const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!);
-    res.send({ currentUser: payload });
-  } catch (err) {
-    res.send({ currentUser: null });
-  }
-  res.send('Hi there');
+    if (req.session?.jwt) {
+      const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!);
+      return res.send({ currentUser: payload });
+    }
+  } catch (err) {}
+  res.send({ currentUser: null });
 });
 
 router.post(
