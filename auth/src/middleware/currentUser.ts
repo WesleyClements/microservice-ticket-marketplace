@@ -1,13 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-import { UserRole } from '@db/models/User';
-
-interface UserPayload {
-  id: string;
-  role: UserRole;
-  email: string;
-}
+import { UserPayload } from 'util/userPayload';
 
 declare global {
   namespace Express {
