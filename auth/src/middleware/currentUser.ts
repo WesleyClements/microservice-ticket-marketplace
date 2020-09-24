@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
+import { UserRole } from '@db/models/User';
+
 interface UserPayload {
   id: string;
-  role?: string;
+  role?: UserRole;
   email: string;
 }
 
