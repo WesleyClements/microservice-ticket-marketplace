@@ -7,9 +7,13 @@ import { connectToDB } from 'db';
   }
   const PORT = process.env.PORT || 3000;
 
-  await connectToDB();
+  try {
+    await connectToDB();
 
-  app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
-  });
+    app.listen(PORT, () => {
+      console.log(`Listening on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error(err);
+  }
 })();

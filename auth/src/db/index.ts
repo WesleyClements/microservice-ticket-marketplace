@@ -11,7 +11,4 @@ export const connectToDB = () =>
     })
     .then(() => {
       console.log('Connected to mongodb');
-    })
-    .catch((err) => {
-      console.error(err);
     });
