@@ -2,9 +2,11 @@ import express from 'express';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
-import '@db';
-
 import { currentUser, errorHandler } from 'middleware';
+
+import routes from 'routes';
+
+import 'db';
 
 export const app = express();
 
@@ -20,7 +22,6 @@ app.use(
 );
 
 app.use(currentUser);
-
-app.use('/', require('./routes').router);
-
 app.use(errorHandler);
+
+app.use('/', routes);
