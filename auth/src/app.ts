@@ -6,7 +6,7 @@ import { currentUser, errorHandler } from 'middleware';
 
 import routes from 'routes';
 
-export const app = express();
+const app = express();
 
 app.set('trust proxy', true);
 
@@ -23,3 +23,5 @@ app.use(currentUser);
 app.use(errorHandler);
 
 app.use('/', routes);
+
+export default app;
