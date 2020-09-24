@@ -1,8 +1,8 @@
 import { StandardizedError } from './StandardizedError';
 
 export class AuthorizationError extends StandardizedError {
-  constructor(message: string) {
-    super(message, 401, { message });
+  constructor() {
+    super('not authorized', 401, { message: 'not authorized' });
     Object.setPrototypeOf(this, AuthorizationError.prototype);
   }
 }

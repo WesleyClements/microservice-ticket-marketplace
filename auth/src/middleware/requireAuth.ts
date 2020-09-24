@@ -11,14 +11,14 @@ export function requireAuth(...args: any[]) {
     const roles = args as UserRole[];
     return (req: Request, res: Response, next: NextFunction) => {
       if (!req.currentUser || !roles.includes(req.currentUser.role)) {
-        throw new AuthorizationError('unauthorized access');
+        throw new AuthorizationError();
       }
       next();
     };
   } else {
     const [req, res, next] = args as [Request, Response, NextFunction];
     if (!req.currentUser) {
-      throw new AuthorizationError('unauthorized access');
+      throw new AuthorizationError();
     }
     next();
   }
