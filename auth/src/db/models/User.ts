@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 const PASSWORD_SALT_ROUNDS = 10;
-const userRoles = ['default', 'admin'];
+const userRoles = (<T extends string>(...args: T[]) => args)('default', 'admin');
 const defaultUserRole = 0;
 
 export type UserRole = typeof userRoles[number];
