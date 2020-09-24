@@ -7,6 +7,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
 export function requireAuth(req: string | Request, res?: Response, next?: NextFunction) {
   if (typeof req === 'string') {
     const role = req;
+    if (!role) throw Error('role is an empty string');
     return (req: Request, res: Response, next: NextFunction) => {
       if (req.currentUser?.role !== role) {
         throw new AuthorizationError('unauthorized access');
