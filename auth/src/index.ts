@@ -4,7 +4,7 @@ import cookieSession from 'cookie-session';
 
 import '@db';
 
-import { errorHandler } from '@middleware';
+import { currentUser, errorHandler } from '@middleware';
 
 const PORT = 3000;
 
@@ -24,6 +24,8 @@ app.use(
     secure: true,
   })
 );
+
+app.use(currentUser);
 
 app.use('/', require('./routes').router);
 
