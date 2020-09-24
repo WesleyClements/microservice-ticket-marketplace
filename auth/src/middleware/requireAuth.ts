@@ -4,22 +4,22 @@ import { UserRole } from '@db/models/User';
 
 import { AuthorizationError } from '@errors';
 
-export function requireAuth(role: UserRole): (req: Request, res: Response, next: NextFunction) => void;
+export function requireAuth(...roles: UserRole[]): (req: Request, res: Response, next: NextFunction) => void;
 export function requireAuth(req: Request, res: Response, next: NextFunction): void;
-export function requireAuth(req: UserRole | Request, res?: Response, next?: NextFunction) {
-  if (typeof req === 'string') {
-    const role = req;
-    if (!role) throw Error('role is an empty string');
+export function requireAuth(...args: any[]) {
+  if (typeof args[0] === 'string') {
+    const roles = args;
     return (req: Request, res: Response, next: NextFunction) => {
-      if (req.currentUser?.role !== role) {
+      if (!roles.includes(req.currentUser?.role)) {
         throw new AuthorizationError('unauthorized access');
       }
       next();
     };
   } else {
+    const [req, res, next] = args as [Request, Response, NextFunction];
     if (!req.currentUser) {
       throw new AuthorizationError('unauthorized access');
     }
-    next!();
+    next();
   }
 }
