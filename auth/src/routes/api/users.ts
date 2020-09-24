@@ -1,13 +1,14 @@
 import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
-import jwt from 'jsonwebtoken';
 
-import { validateRequest } from '@middleware';
+import { requireAuth, validateRequest } from 'middleware';
 
 import { MongoError } from 'mongodb';
-import { BadRequestError } from '@errors';
+import { BadRequestError } from 'errors';
 
-import { User } from '@db';
+import { User } from 'db';
+
+import { createJWT } from 'util/userPayload';
 
 const router = Router();
 
@@ -26,9 +27,9 @@ router.post(
     const { email, password } = req.body;
 
     try {
-      const user = await User.create({ email, password });
+      const user = await User.create({ role: 'default', email, password });
       req.session = {
-        jwt: jwt.sign({ id: user.id, email: user.email }, process.env.JWT_KEY!),
+        jwt: createJWT({ id: user.id, role: user.role, email: user.email }),
       };
 
       res.status(201).json(user);
@@ -58,7 +59,7 @@ router.post(
     }
     if (user && (await user.comparePassword(password))) {
       req.session = {
-        jwt: jwt.sign({ id: user.id, email: user.email }, process.env.JWT_KEY!),
+        jwt: createJWT({ id: user.id, role: user.role, email: user.email }),
       };
 
       res.status(200).json(user);
@@ -68,7 +69,7 @@ router.post(
   }
 );
 
-router.post('/signout', (req, res) => {
+router.post('/signout', requireAuth, (req, res) => {
   req.session = null;
   res.status(200).end();
 });
