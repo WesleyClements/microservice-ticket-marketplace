@@ -6,8 +6,6 @@ import { currentUser, errorHandler } from 'middleware';
 
 import routes from 'routes';
 
-import 'db';
-
 export const app = express();
 
 app.set('trust proxy', true);
