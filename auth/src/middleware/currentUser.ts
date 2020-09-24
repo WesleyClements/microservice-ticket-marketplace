@@ -5,7 +5,7 @@ import { UserRole } from '@db/models/User';
 
 interface UserPayload {
   id: string;
-  role?: UserRole;
+  role: UserRole;
   email: string;
 }
 
