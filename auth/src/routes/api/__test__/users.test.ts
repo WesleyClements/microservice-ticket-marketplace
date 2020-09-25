@@ -141,7 +141,7 @@ describe('/signout', () => {
         .set('Cookie', res.get('Set-Cookie'))
         .expect(200);
     });
-    it('unsets a cookie if logged in', async () => {
+    it('unsets session cookie if logged in', async () => {
       const signupRes = await request(app)
         .post('/api/users/signup')
         .send({ email: 'test@test.com', password: 'password' })
