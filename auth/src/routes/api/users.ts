@@ -20,7 +20,10 @@ router.post(
   '/signup',
   [
     body('email').isEmail().withMessage('email must be valid'),
-    body('password').trim().isLength({ min: 6 }).withMessage('password must be more than 6 characters'),
+    body('password')
+      .trim()
+      .isLength({ min: 6 })
+      .withMessage('password must be more than 6 characters'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -46,7 +49,10 @@ router.post(
   '/signin',
   [
     body('email').isEmail().withMessage('email must be valid'),
-    body('password').trim().notEmpty().withMessage('you must supply a password'),
+    body('password')
+      .trim()
+      .notEmpty()
+      .withMessage('you must supply a password'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
