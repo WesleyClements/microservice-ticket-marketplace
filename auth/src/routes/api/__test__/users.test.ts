@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from 'app';
+import { cookie } from 'express-validator';
 
 describe('/signup', () => {
   describe('POST', () => {
@@ -139,6 +140,28 @@ describe('/signout', () => {
         .post('/api/users/signout')
         .set('Cookie', res.get('Set-Cookie'))
         .expect(200);
+    });
+    it('unsets a cookie if logged in', async () => {
+      const signupRes = await request(app)
+        .post('/api/users/signup')
+        .send({ email: 'test@test.com', password: 'password' })
+        .expect(201);
+      const res = await request(app)
+        .post('/api/users/signout')
+        .set('Cookie', signupRes.get('Set-Cookie'))
+        .expect(200);
+      const sessionCookies = res
+        .get('Set-Cookie')
+        .map((cookieStr) => {
+          return cookieStr.split(';').map((section) => section.trim());
+        })
+        .filter((cookie) =>
+          cookie.some((section) => /^express:sess/.test(section))
+        );
+      expect(sessionCookies).toHaveLength(1);
+      expect(sessionCookies[0]).toContain(
+        'expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      );
     });
   });
 });
