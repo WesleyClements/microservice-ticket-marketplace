@@ -13,7 +13,7 @@ import { createJWT } from 'util/userPayload';
 const router = Router();
 
 router.get('/currentuser', (req, res) => {
-  return res.send({ currentUser: req.currentUser || null });
+  res.status(200).send({ currentUser: req.currentUser || null });
 });
 
 router.post(
