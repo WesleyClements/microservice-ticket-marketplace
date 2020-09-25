@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 
 import { UserRole } from 'db/models/User';
 
 import { AuthorizationError } from 'errors';
 
-export function requireAuth(...roles: UserRole[]): (req: Request, res: Response, next: NextFunction) => void;
+export function requireAuth(...roles: UserRole[]): RequestHandler;
 export function requireAuth(req: Request, res: Response, next: NextFunction): void;
 export function requireAuth(...args: any[]) {
   if (typeof args[0] === 'string') {
@@ -16,7 +16,7 @@ export function requireAuth(...args: any[]) {
       next();
     };
   } else {
-    const [req, res, next] = args as [Request, Response, NextFunction];
+    const [req, , next] = args as [Request, Response, NextFunction];
     if (!req.currentUser) {
       throw new AuthorizationError();
     }
