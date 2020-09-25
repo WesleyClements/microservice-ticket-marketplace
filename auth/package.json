@@ -2,6 +2,9 @@
   "name": "auth",
   "version": "1.0.0",
   "description": "Auth service",
+  "author": "Wesley Clements <wesley.clements@gmail.com>",
+  "keywords": [],
+  "license": "ISC",
   "main": "index.js",
   "scripts": {
     "start": "if [ \"$NODE_ENV\" = \"production\" ]; then npm run start:prod; else npm run start:dev; fi",
@@ -9,9 +12,13 @@
     "start:dev": "ts-node-dev --poll -r tsconfig-paths/register src/index.ts",
     "test": "jest --watchAll --no-cache"
   },
-  "keywords": [],
-  "author": "Wesley Clements <wesley.clements@gmail.com>",
-  "license": "ISC",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
+  },
   "devDependencies": {
     "@types/jest": "^26.0.14",
     "@types/supertest": "^2.0.10",
