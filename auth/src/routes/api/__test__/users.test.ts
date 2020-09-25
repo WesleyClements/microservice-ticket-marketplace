@@ -1,6 +1,29 @@
 import request from 'supertest';
 import app from 'app';
-import { cookie } from 'express-validator';
+
+describe('/currentuser', () => {
+  describe('GET', () => {
+    it('responds with { currentUser: null } if not logged in', async () => {
+      return request(app)
+        .get('/api/users/currentuser')
+        .expect(200)
+        .expect({ currentUser: null });
+    });
+    it('responds with { currentUser: *data* } if logged in', async () => {
+      const signupRes = await request(app)
+        .post('/api/users/signup')
+        .send({ email: 'test@test.com', password: 'password' })
+        .expect(201);
+      const res = await request(app)
+        .get('/api/users/currentuser')
+        .set('Cookie', signupRes.get('Set-Cookie'))
+        .expect(200);
+      expect(res.body).toHaveProperty('currentUser');
+      expect(res.body.currentUser).toHaveProperty('role', 'default');
+      expect(res.body.currentUser).toHaveProperty('email', 'test@test.com');
+    });
+  });
+});
 
 describe('/signup', () => {
   describe('POST', () => {
