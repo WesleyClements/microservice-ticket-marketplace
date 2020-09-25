@@ -124,3 +124,21 @@ describe('/signin', () => {
     });
   });
 });
+
+describe('/signout', () => {
+  describe('POST', () => {
+    it('returns 401 if not logged in', async () => {
+      return request(app).post('/api/users/signout').send().expect(401);
+    });
+    it('returns 200 if logged in', async () => {
+      const res = await request(app)
+        .post('/api/users/signup')
+        .send({ email: 'test@test.com', password: 'password' })
+        .expect(201);
+      return request(app)
+        .post('/api/users/signout')
+        .set('Cookie', res.get('Set-Cookie'))
+        .expect(200);
+    });
+  });
+});
