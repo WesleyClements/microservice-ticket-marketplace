@@ -18,7 +18,6 @@ describe('/currentuser', () => {
         .get('/api/users/currentuser')
         .set('Cookie', signupRes.get('Set-Cookie'))
         .expect(200);
-      expect(res.body).toHaveProperty('currentUser');
       expect(res.body.currentUser).toHaveProperty('role', 'default');
       expect(res.body.currentUser).toHaveProperty('email', 'test@test.com');
     });
