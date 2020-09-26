@@ -9,7 +9,7 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   if (err instanceof StandardizedError) {
-    const { status, message, errors } = err;
+    const { status, errors } = err;
     res.status(status).send({ errors });
   } else {
     res.status(500).send({ message: err.message });
