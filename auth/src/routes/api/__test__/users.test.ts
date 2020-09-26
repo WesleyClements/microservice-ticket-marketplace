@@ -10,13 +10,13 @@ describe('/currentuser', () => {
         .expect({ currentUser: null });
     });
     it('responds with { currentUser: *data* } if logged in', async () => {
-      const signupRes = await request(app)
-        .post('/api/users/signup')
-        .send({ email: 'test@test.com', password: 'password' })
-        .expect(201);
+      const cookies = await global.signup({
+        email: 'test@test.com',
+        password: 'password',
+      });
       const res = await request(app)
         .get('/api/users/currentuser')
-        .set('Cookie', signupRes.get('Set-Cookie'))
+        .set('Cookie', cookies)
         .expect(200);
       expect(res.body.currentUser).toHaveProperty('role', 'default');
       expect(res.body.currentUser).toHaveProperty('email', 'test@test.com');
@@ -113,10 +113,10 @@ describe('/signin', () => {
     });
 
     it('returns 400 if incorrect password', async () => {
-      await request(app)
-        .post('/api/users/signup')
-        .send({ email: 'test@test.com', password: 'password' })
-        .expect(201);
+      await global.signup({
+        email: 'test@test.com',
+        password: 'password',
+      });
       return request(app)
         .post('/api/users/signin')
         .send({ email: 'test@test.com', password: 'pass' })
@@ -124,10 +124,10 @@ describe('/signin', () => {
     });
 
     it('returns 200 if valid credentials', async () => {
-      await request(app)
-        .post('/api/users/signup')
-        .send({ email: 'test@test.com', password: 'password' })
-        .expect(201);
+      await global.signup({
+        email: 'test@test.com',
+        password: 'password',
+      });
       return request(app)
         .post('/api/users/signin')
         .send({ email: 'test@test.com', password: 'password' })
@@ -135,10 +135,10 @@ describe('/signin', () => {
     });
 
     it('sets a cookie if valid credentials', async () => {
-      await request(app)
-        .post('/api/users/signup')
-        .send({ email: 'test@test.com', password: 'password' })
-        .expect(201);
+      await global.signup({
+        email: 'test@test.com',
+        password: 'password',
+      });
       const res = await request(app)
         .post('/api/users/signin')
         .send({ email: 'test@test.com', password: 'password' })
@@ -154,32 +154,29 @@ describe('/signout', () => {
       return request(app).post('/api/users/signout').send().expect(401);
     });
     it('returns 200 if logged in', async () => {
-      const res = await request(app)
-        .post('/api/users/signup')
-        .send({ email: 'test@test.com', password: 'password' })
-        .expect(201);
+      const cookies = await global.signup({
+        email: 'test@test.com',
+        password: 'password',
+      });
       return request(app)
         .post('/api/users/signout')
-        .set('Cookie', res.get('Set-Cookie'))
+        .set('Cookie', cookies)
         .expect(200);
     });
     it('unsets session cookie if logged in', async () => {
-      const signupRes = await request(app)
-        .post('/api/users/signup')
-        .send({ email: 'test@test.com', password: 'password' })
-        .expect(201);
+      const cookies = await global.signup({
+        email: 'test@test.com',
+        password: 'password',
+      });
       const res = await request(app)
         .post('/api/users/signout')
-        .set('Cookie', signupRes.get('Set-Cookie'))
+        .set('Cookie', cookies)
         .expect(200);
       const sessionCookies = res
         .get('Set-Cookie')
-        .map((cookieStr) => {
-          return cookieStr.split(';').map((section) => section.trim());
-        })
-        .filter((cookie) =>
-          cookie.some((section) => /^express:sess/.test(section))
-        );
+        .map((cookie) => cookie.split(';'))
+        .map((cookie) => cookie.map((prop) => prop.trim()))
+        .filter((cookie) => cookie.some((prop) => /^express:sess/.test(prop)));
       expect(sessionCookies).toHaveLength(1);
       expect(sessionCookies[0]).toContain(
         'expires=Thu, 01 Jan 1970 00:00:00 GMT'
