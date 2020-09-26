@@ -1,9 +1,11 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
-export default ({ Component, pageProps }) => {
+const App = ({ Component, pageProps }) => {
   return (
     <>
       <Component {...pageProps} />
     </>
   );
 };
+
+export default App;
