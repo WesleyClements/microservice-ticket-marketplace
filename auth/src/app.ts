@@ -20,8 +20,9 @@ app.use(
 );
 
 app.use(currentUser);
-app.use(errorHandler);
 
 app.use('/', routes);
+
+app.use(errorHandler);
 
 export default app;
