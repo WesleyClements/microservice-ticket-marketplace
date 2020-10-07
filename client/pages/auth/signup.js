@@ -37,6 +37,7 @@ const SignUp = () => {
       <Form.Group controlId="signup-password-input">
         <Form.Label>Password</Form.Label>
         <Form.Control
+          type="password"
           required
           placeholder="..."
           onChange={(e) => setPassword(e.target.value)}
