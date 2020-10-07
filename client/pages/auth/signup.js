@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { useRequest } from '../../hooks';
 
 import { Form, Button } from 'react-bootstrap';
 
@@ -8,20 +8,19 @@ const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState([]);
+
+  const { doRequest, errors } = useRequest({
+    url: '/api/users/signup',
+    method: 'post',
+  });
 
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) return;
-    try {
-      const response = await axios.post('/api/users/signup', {
-        email,
-        password,
-      });
-      console.log(response);
-    } catch (err) {
-      setErrors(err.response.data.errors);
-    }
+    await doRequest({
+      email,
+      password,
+    });
   };
 
   return (
@@ -30,22 +29,20 @@ const SignUp = () => {
       <Form.Group controlId="signup-email-input">
         <Form.Label>Email Address</Form.Label>
         <Form.Control
-          type="email"
           required
-          placeholder="Enter email"
+          placeholder="example@placeholder.com"
           onChange={(e) => setEmail(e.target.value)}
         />
       </Form.Group>
       <Form.Group controlId="signup-password-input">
         <Form.Label>Password</Form.Label>
         <Form.Control
-          type="password"
           required
-          placeholder="Password"
+          placeholder="..."
           onChange={(e) => setPassword(e.target.value)}
         />
       </Form.Group>
-      {!!errors.length && (
+      {!!errors && (
         <div className="alert alert-danger">
           <h4>Ooops...</h4>
           <ul>
