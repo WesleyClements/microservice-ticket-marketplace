@@ -19,9 +19,12 @@ const SignUp = () => {
     e.preventDefault();
     if (!email || !password) return;
     const res = await postSignup({
-      email,
-      password,
+      data: {
+        email,
+        password,
+      },
     });
+    console.log(res);
     if (!res) return;
     Router.push('/');
   };
