@@ -11,18 +11,18 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
 
   const [postSignup, postSignupErrors] = useRequest({
-    url: '/api/users/signup',
     method: 'post',
+    url: '/api/users/signup',
   });
 
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) return;
-    const user = await postSignup({
+    const res = await postSignup({
       email,
       password,
     });
-    if (!user) return;
+    if (!res) return;
     Router.push('/');
   };
 
