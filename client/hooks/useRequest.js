@@ -3,10 +3,10 @@ import axios from 'axios';
 
 const useRequest = ({ url, method }) => {
   const [errors, setErrors] = useState(null);
-  const doRequest = async (body) => {
+  const doRequest = async ({ data, params }) => {
     try {
       setErrors(null);
-      return await axios[method](url, body);
+      return await axios[method](`${url}${queryStr}`, { data, params });
     } catch (err) {
       setErrors(err.response.data.errors);
     }
