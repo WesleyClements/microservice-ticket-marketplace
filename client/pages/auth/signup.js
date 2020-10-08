@@ -24,7 +24,6 @@ const SignUp = () => {
         password,
       },
     });
-    console.log(res);
     if (!res) return;
     Router.push('/');
   };
