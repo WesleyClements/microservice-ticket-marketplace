@@ -6,8 +6,7 @@ const useRequest = ({ url, method }) => {
   const doRequest = async (body) => {
     try {
       setErrors(null);
-      const res = await axios[method](url, body);
-      return res.data;
+      return await axios[method](url, body);
     } catch (err) {
       setErrors(err.response.data.errors);
     }
