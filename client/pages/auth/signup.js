@@ -53,8 +53,8 @@ const SignUp = () => {
         <div className="alert alert-danger">
           <h4>Ooops...</h4>
           <ul>
-            {postSignupErrors.map((err) => (
-              <li>{err.message}</li>
+            {postSignupErrors.map((err, i) => (
+              <li key={'error' + i}>{err.message}</li>
             ))}
           </ul>
         </div>
