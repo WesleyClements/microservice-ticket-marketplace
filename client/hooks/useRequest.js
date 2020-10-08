@@ -6,7 +6,7 @@ const useRequest = ({ url, method }) => {
   const doRequest = async ({ data, params }) => {
     try {
       setErrors(null);
-      return await axios[method](`${url}${queryStr}`, { data, params });
+      return await axios({ method, url, data, params });
     } catch (err) {
       setErrors(err.response.data.errors);
     }
