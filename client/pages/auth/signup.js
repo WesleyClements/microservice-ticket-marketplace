@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Router from 'next/router';
 import { useRequest } from '../../hooks';
 
 import { Form, Button } from 'react-bootstrap';
@@ -9,7 +10,7 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { doRequest, errors } = useRequest({
+  const [postSignup, postSignupErrors] = useRequest({
     url: '/api/users/signup',
     method: 'post',
   });
@@ -17,10 +18,12 @@ const SignUp = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) return;
-    await doRequest({
+    const user = await postSignup({
       email,
       password,
     });
+    if (!user) return;
+    Router.push('/');
   };
 
   return (
@@ -43,11 +46,11 @@ const SignUp = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </Form.Group>
-      {!!errors && (
+      {!!postSignupErrors && (
         <div className="alert alert-danger">
           <h4>Ooops...</h4>
           <ul>
-            {errors.map((err) => (
+            {postSignupErrors.map((err) => (
               <li>{err.message}</li>
             ))}
           </ul>
