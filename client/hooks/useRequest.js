@@ -8,7 +8,9 @@ const useRequest = ({ url, method }) => {
       setErrors(null);
       return await axios({ method, url, data, params });
     } catch (err) {
-      setErrors(err.response.data.errors);
+      const errors = err?.response?.data?.errors;
+      if (!errors) throw err;
+      setErrors(errors);
     }
   };
   return [doRequest, errors];
