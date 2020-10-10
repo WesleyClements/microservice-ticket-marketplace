@@ -8,7 +8,7 @@ import { BadRequestError } from 'errors';
 
 import { User } from 'db';
 
-import { createJWT } from 'util/userPayload';
+import { createJWT } from '@wkctickets/common/';
 
 const router = Router();
 
