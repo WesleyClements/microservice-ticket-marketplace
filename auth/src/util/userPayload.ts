@@ -1,10 +1,7 @@
 import jwt from 'jsonwebtoken';
 
-import { UserRole } from 'db/models/User';
-
 export interface UserPayload {
   id: string;
-  role: UserRole;
   email: string;
 }
 
