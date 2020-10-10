@@ -1,15 +1,9 @@
-import {buildClient} from "../api";
-
 const Index = ({ currentUser }) => {
-  console.log(currentUser);
-  return <h1>Landing page</h1>;
-};
-
-Index.getInitialProps = async (context) => {
-  const axios = buildClient(context);
-  const res = await axios.get('/api/users/currentuser');
-  const { currentUser } = res.data;
-  return { currentUser };
+  return currentUser ? (
+    <h1>You are signed in</h1>
+  ) : (
+    <h1>You are not signed in</h1>
+  );
 };
 
 export default Index;
