@@ -1,14 +1,14 @@
 import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
 
-import { requireAuth, validateRequest } from 'middleware';
+import { requireAuth, validateRequest } from '@wkctickets/common/middleware';
 
 import { MongoError } from 'mongodb';
-import { BadRequestError } from 'errors';
+import { BadRequestError } from '@wkctickets/common/errors';
 
 import { User } from 'db';
 
-import { createJWT } from '@wkctickets/common/';
+import { createJWT } from '@wkctickets/common/util';
 
 const router = Router();
 

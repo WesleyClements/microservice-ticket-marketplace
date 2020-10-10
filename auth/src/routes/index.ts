@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { NotFoundError } from 'errors';
+import { NotFoundError } from '@wkctickets/common/errors';
 
 const router = Router();
 

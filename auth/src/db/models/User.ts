@@ -1,11 +1,8 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 import bcrypt from 'bcrypt';
+import { UserRole, userRoles } from '@wkctickets/common/util';
 
 const PASSWORD_SALT_ROUNDS = 10;
-const userRoles = (<T extends string>(...args: T[]) => args)('default', 'admin');
-const defaultUserRole = 0;
-
-export type UserRole = typeof userRoles[number];
 
 interface IUserDocument extends Document {
   role: UserRole;
@@ -20,7 +17,7 @@ const userSchema = new Schema<IUserDocument>(
   {
     role: {
       type: String,
-      default: userRoles[defaultUserRole],
+      default: userRoles[userRoles.default],
       enum: userRoles,
     },
     email: {
@@ -64,4 +61,7 @@ userSchema.methods.comparePassword = async function (password: string) {
   return bcrypt.compare(password, user.password);
 };
 
-export const User = mongoose.model<IUserDocument, IUserModel>('User', userSchema);
+export const User = mongoose.model<IUserDocument, IUserModel>(
+  'User',
+  userSchema
+);

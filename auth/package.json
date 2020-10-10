@@ -46,6 +46,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mongoose": "^5.7.36",
     "@types/node": "^14.11.2",
+    "@wkctickets/common": "0.0.3",
     "bcrypt": "^5.0.0",
     "cookie-session": "^1.4.0",
     "express": "^5.0.0-alpha.8",
