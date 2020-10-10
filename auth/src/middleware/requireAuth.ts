@@ -5,7 +5,11 @@ import { UserRole } from 'db/models/User';
 import { AuthorizationError } from 'errors';
 
 export function requireAuth(...roles: UserRole[]): RequestHandler;
-export function requireAuth(req: Request, res: Response, next: NextFunction): void;
+export function requireAuth(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void;
 export function requireAuth(...args: any[]) {
   if (typeof args[0] === 'string') {
     const roles = args as UserRole[];

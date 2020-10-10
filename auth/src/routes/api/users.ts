@@ -32,7 +32,7 @@ router.post(
     try {
       const user = await User.create({ role: 'default', email, password });
       req.session = {
-        jwt: createJWT({ id: user.id, email: user.email }),
+        jwt: createJWT({ id: user.id, role: user.role, email: user.email }),
       };
 
       res.status(201).json(user);
@@ -65,7 +65,7 @@ router.post(
     }
     if (user && (await user.comparePassword(password))) {
       req.session = {
-        jwt: createJWT({ id: user.id, email: user.email }),
+        jwt: createJWT({ id: user.id, role: user.role, email: user.email }),
       };
 
       res.status(200).json(user);

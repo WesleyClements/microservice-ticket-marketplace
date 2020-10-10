@@ -1,7 +1,9 @@
+import { UserRole } from 'db/models/User';
 import jwt from 'jsonwebtoken';
 
 export interface UserPayload {
   id: string;
+  role: UserRole;
   email: string;
 }
 
