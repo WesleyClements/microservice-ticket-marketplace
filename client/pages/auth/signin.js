@@ -6,7 +6,7 @@ import { Form, Button } from 'react-bootstrap';
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
-const SignUp = () => {
+const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -65,4 +65,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
