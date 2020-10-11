@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { UserRole, userRoles } from '@wkctickets/common/util';
+import { UserRole, userRoles } from '@wkctickets/common/auth';
 
 const PASSWORD_SALT_ROUNDS = 10;
 
