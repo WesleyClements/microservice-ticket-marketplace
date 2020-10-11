@@ -20,6 +20,14 @@
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "^app$": "<rootDir>/src/app",
+      "^db(.*)$": "<rootDir>/src/db$1",
+      "^errors(.*)$": "<rootDir>/src/errors$1",
+      "^middleware(.*)$": "<rootDir>/src/middleware$1",
+      "^routes(.*)$": "<rootDir>/src/routes$1",
+      "^util/(.*)$": "<rootDir>/src/util/$1"
     }
   },
   "devDependencies": {
