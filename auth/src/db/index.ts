@@ -4,7 +4,7 @@ export { User } from './models/User';
 
 export const connectToDB = () =>
   mongoose
-    .connect('mongodb://auth-mongo-srv:27017/auth', {
+    .connect(process.env.MONGO_URI!, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
