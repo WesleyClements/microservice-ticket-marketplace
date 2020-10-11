@@ -1,10 +1,11 @@
 import app from 'app';
 import { connectToDB } from 'db';
 
+import { checkEnv } from '@wkctickets/common/util';
+
 (async () => {
-  if (!process.env.JWT_KEY) {
-    throw new Error('JWT_KEY must be defined');
-  }
+  checkEnv('JWT_KEY', 'MONGO_URI');
+
   const PORT = process.env.PORT || 3000;
 
   try {
