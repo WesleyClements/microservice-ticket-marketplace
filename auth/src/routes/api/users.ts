@@ -10,7 +10,7 @@ import { User } from 'db';
 
 import { createJWT } from '@wkctickets/common/auth';
 
-const router = Router();
+export const router = Router();
 
 router.get('/currentuser', (req, res) => {
   res.status(200).send({ currentUser: req.currentUser || null });
@@ -79,5 +79,3 @@ router.post('/signout', requireAuth, (req, res) => {
   req.session = null;
   res.status(200).end();
 });
-
-export { router };
