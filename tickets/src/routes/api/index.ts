@@ -1,5 +1,5 @@
 import { Router } from 'express';
 
-const router = Router();
+export const router = Router();
 
-export { router };
+router.use('/tickets', require('./tickets').router);
