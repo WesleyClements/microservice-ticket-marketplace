@@ -12,8 +12,8 @@ router.post(
   '/',
   requireAuth,
   [
-    body('title').isString().notEmpty().withMessage('Please privide a title'),
-    body('price').isString().notEmpty().withMessage('Please privide a price'),
+    body('title').isString().notEmpty().withMessage('Please provide a title'),
+    body('price').isFloat({ gt: 0 }).withMessage('Please provide a price'),
   ],
   validateRequest,
   (req: Request, res: Response) => {
