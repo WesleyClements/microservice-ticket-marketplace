@@ -29,20 +29,20 @@ describe('/api/tickets', () => {
             })
             .expect(400);
         });
-        it('returns an error if title is not a string', async () => {
-          const sessionCookie = global.createSessionCookie();
-          await request(app)
-            .post('/api/tickets')
-            .set('Cookie', sessionCookie)
-            .send({ title: 1234, price: '1200' })
-            .expect(400);
-        });
         it('returns an error if title is an empty string', async () => {
           const sessionCookie = global.createSessionCookie();
           await request(app)
             .post('/api/tickets')
             .set('Cookie', sessionCookie)
             .send({ title: '', price: '1200' })
+            .expect(400);
+        });
+        it('returns an error if title is not a string', async () => {
+          const sessionCookie = global.createSessionCookie();
+          await request(app)
+            .post('/api/tickets')
+            .set('Cookie', sessionCookie)
+            .send({ title: 1234, price: '1200' })
             .expect(400);
         });
       });
@@ -57,17 +57,6 @@ describe('/api/tickets', () => {
             })
             .expect(400);
         });
-        it('returns an error if price is not a string', async () => {
-          const sessionCookie = global.createSessionCookie();
-          await request(app)
-            .post('/api/tickets')
-            .set('Cookie', sessionCookie)
-            .send({
-              title: 'title',
-              price: 1200,
-            })
-            .expect(400);
-        });
         it('returns an error if price is an empty string', async () => {
           const sessionCookie = global.createSessionCookie();
           await request(app)
@@ -79,13 +68,49 @@ describe('/api/tickets', () => {
             })
             .expect(400);
         });
+        it('returns an error if price is not a number', async () => {
+          const sessionCookie = global.createSessionCookie();
+          await request(app)
+            .post('/api/tickets')
+            .set('Cookie', sessionCookie)
+            .send({
+              title: 'title',
+              price: 'cat',
+            })
+            .expect(400);
+        });
+        it('returns an error if price is less than 0', async () => {
+          const sessionCookie = global.createSessionCookie();
+          await request(app)
+            .post('/api/tickets')
+            .set('Cookie', sessionCookie)
+            .send({
+              title: 'title',
+              price: '-1',
+            })
+            .expect(400);
+        });
+        it('returns an error if price is equal to 0', async () => {
+          const sessionCookie = global.createSessionCookie();
+          await request(app)
+            .post('/api/tickets')
+            .set('Cookie', sessionCookie)
+            .send({
+              title: 'title',
+              price: '0',
+            })
+            .expect(400);
+        });
       });
       it('created a ticket with valid inputs', async () => {
         const sessionCookie = global.createSessionCookie();
         await request(app)
           .post('/api/tickets')
           .set('Cookie', sessionCookie)
-          .send({})
+          .send({
+            title: 'title',
+            price: '1200',
+          })
           .expect(201);
       });
     });
