@@ -1,12 +1,12 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
-import { createJWT, UserRole } from '@wkctickets/common/auth';
+import { createJWT } from '@wkctickets/common/auth';
 
 declare global {
   namespace NodeJS {
     interface Global {
-      createSessionCookie: (role?: UserRole) => string[];
+      createSessionCookie: () => string[];
     }
   }
 }
@@ -36,11 +36,10 @@ afterAll(async () => {
   await mongoose.disconnect();
 });
 
-global.createSessionCookie = (role = 'default') => {
+global.createSessionCookie = () => {
   const payload = {
     id: '123123',
     email: 'test@test.test',
-    role,
   };
   const session = { jwt: createJWT(payload) };
   const encoded = Buffer.from(JSON.stringify(session)).toString('base64');
