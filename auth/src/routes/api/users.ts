@@ -1,7 +1,10 @@
 import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
 
-import { requireAuth, validateRequest } from '@wkctickets/common/middleware';
+import {
+  requireAuthentication,
+  validateRequest,
+} from '@wkctickets/common/middleware';
 
 import { MongoError } from 'mongodb';
 import { BadRequestError } from '@wkctickets/common/errors';
@@ -32,7 +35,7 @@ router.post(
     try {
       const user = await User.create({ role: 'default', email, password });
       req.session = {
-        jwt: createJWT({ id: user.id, role: user.role, email: user.email }),
+        jwt: createJWT(user.getJWTPayload()),
       };
 
       res.status(201).json(user);
@@ -65,7 +68,7 @@ router.post(
     }
     if (user && (await user.comparePassword(password))) {
       req.session = {
-        jwt: createJWT({ id: user.id, role: user.role, email: user.email }),
+        jwt: createJWT(user.getJWTPayload()),
       };
 
       res.status(200).json(user);
@@ -75,7 +78,7 @@ router.post(
   }
 );
 
-router.post('/signout', requireAuth, (req, res) => {
+router.post('/signout', requireAuthentication, (req, res) => {
   req.session = null;
   res.status(200).end();
 });

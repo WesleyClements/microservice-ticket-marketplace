@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { UserRole, userRoles } from '@wkctickets/common/auth';
+import { UserPayload, UserRole, userRoles } from '@wkctickets/common/auth';
 
 const PASSWORD_SALT_ROUNDS = 10;
 
@@ -9,6 +9,7 @@ interface IUserDocument extends Document {
   email: string;
   password: string;
   comparePassword: (password: string) => Promise<boolean>;
+  getJWTPayload: () => UserPayload;
 }
 
 interface IUserModel extends Model<IUserDocument> {}
@@ -59,6 +60,11 @@ userSchema.pre('save', async function () {
 userSchema.methods.comparePassword = async function (password: string) {
   const user = this as IUserDocument;
   return bcrypt.compare(password, user.password);
+};
+
+userSchema.methods.getJWTPayload = function () {
+  const user = this as IUserDocument;
+  return { id: user.id, email: user.email } as UserPayload;
 };
 
 export const User = mongoose.model<IUserDocument, IUserModel>(
