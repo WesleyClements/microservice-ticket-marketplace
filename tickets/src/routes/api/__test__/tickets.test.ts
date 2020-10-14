@@ -1,5 +1,6 @@
 import request from 'supertest';
-import app from '../../../app';
+import app from 'app';
+import { Ticket } from 'db';
 
 describe('/api/tickets', () => {
   describe('GET', () => {});
@@ -104,6 +105,7 @@ describe('/api/tickets', () => {
       });
       it('created a ticket with valid inputs', async () => {
         const sessionCookie = global.createSessionCookie();
+        expect((await Ticket.find({})).length).toEqual(0);
         await request(app)
           .post('/api/tickets')
           .set('Cookie', sessionCookie)
@@ -112,6 +114,8 @@ describe('/api/tickets', () => {
             price: '1200',
           })
           .expect(201);
+        const tickets = await Ticket.find({});
+        expect(tickets.length).toEqual(1);
       });
     });
   });
