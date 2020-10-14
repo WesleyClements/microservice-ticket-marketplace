@@ -19,7 +19,7 @@ const ticketSchema = new Schema<ITicketDocument>(
       required: true,
     },
     userId: {
-      type: Types.ObjectId,
+      type: mongoose.Types.ObjectId,
       required: true,
     },
   },
