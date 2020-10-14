@@ -38,7 +38,7 @@ afterAll(async () => {
 
 global.createSessionCookie = () => {
   const payload = {
-    id: '123123',
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.test',
   };
   const session = { jwt: createJWT(payload) };
