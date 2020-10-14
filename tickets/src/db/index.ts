@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export { User } from './models/User';
+export { Ticket } from './models/Ticket';
 
 export const connectToDB = () =>
   mongoose
