@@ -6,6 +6,8 @@ import {
   validateRequest,
 } from '@wkctickets/common/middleware';
 
+import { NotFoundError } from '@wkctickets/common/errors';
+
 import { Ticket } from 'db';
 
 export const router = Router();
@@ -38,6 +40,14 @@ router.post(
 router.put('/', requireAuthentication, (req: Request, res: Response) => {
   res.status(501).end();
 });
-router.get('/:id', (req: Request, res: Response) => {
-  res.status(501).send({});
+
+router.get('/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const ticket = await Ticket.findById(id);
+    if (ticket) {
+      res.status(200).send(ticket);
+    }
+  } catch (err) {}
+  throw new NotFoundError();
 });
