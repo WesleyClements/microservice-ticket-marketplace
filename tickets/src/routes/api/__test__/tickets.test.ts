@@ -3,8 +3,30 @@ import app from 'app';
 import mongoose from 'mongoose';
 import { Ticket } from 'db';
 
+const createTicket = ({ title, price }: { title: string; price: number }) => {
+  return request(app)
+    .post('/api/tickets')
+    .set('Cookie', global.createSessionCookie())
+    .send({ title, price })
+    .expect(201);
+};
+
 describe('/api/tickets', () => {
-  describe('GET', () => {});
+  describe('GET', () => {
+    it('listens for a get request', async () => {
+      const res = await request(app).get('/api/tickets').send();
+      expect(res.status).not.toEqual(404);
+    });
+    it('returns a list of tickets', async () => {
+      const postRes = await Promise.all([
+        createTicket({ title: 'title1', price: 140 }),
+        createTicket({ title: 'title2', price: 1200 }),
+        createTicket({ title: 'title3', price: 234 }),
+      ]);
+      const res = await request(app).get('/api/tickets').send();
+      expect(res.body).toHaveLength(3);
+    });
+  });
   describe('POST', () => {
     it('listens for a post request', async () => {
       const res = await request(app).post('/api/tickets').send({});
@@ -126,11 +148,7 @@ describe('/api/tickets/:id', () => {
         .expect(404);
     });
     it('returns a ticket if valid id', async () => {
-      const postRes = await request(app)
-        .post('/api/tickets')
-        .set('Cookie', global.createSessionCookie())
-        .send({ title: 'title', price: 1200 })
-        .expect(201);
+      const postRes = await createTicket({ title: 'title', price: 1200 });
       const getRes = await request(app)
         .get('/api/tickets/' + postRes.body.id)
         .send()
