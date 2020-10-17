@@ -13,8 +13,9 @@ import { Ticket } from 'db';
 
 export const router = Router();
 
-router.get('/', (req: Request, res: Response) => {
-  res.status(501).send([]);
+router.get('/', async (req: Request, res: Response) => {
+  const tickets = await Ticket.find({});
+  res.status(200).send(tickets);
 });
 router.post(
   '/',
