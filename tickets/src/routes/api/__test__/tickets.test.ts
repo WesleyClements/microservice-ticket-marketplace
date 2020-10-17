@@ -139,78 +139,6 @@ describe('/api/tickets', () => {
       });
     });
   });
-  describe('PUT', () => {
-    it('listens for a put request', async () => {
-      const res = await request(app).put('/api/tickets').send({});
-      expect(res.status).not.toEqual(404);
-    });
-    it('is only accessed by authenticated users', async () => {
-      await request(app).put('/api/tickets').send({}).expect(401);
-      const res = await request(app)
-        .put('/api/tickets')
-        .set('Cookie', global.createSessionCookie())
-        .send({});
-      expect(res.status).not.toEqual(401);
-    });
-    it('returns a 404 if invalid id', async () => {
-      await request(app)
-        .put('/api/tickets')
-        .set('Cookie', global.createSessionCookie())
-        .send({ id: new mongoose.Types.ObjectId(), title: 'cat', price: 100 })
-        .expect(404);
-    });
-    it('returns a 400 if invalid title or price', async () => {
-      await Promise.all([
-        request(app)
-          .put('/api/tickets')
-          .set('Cookie', global.createSessionCookie())
-          .send({ title: '' })
-          .expect(400),
-        request(app)
-          .put('/api/tickets')
-          .set('Cookie', global.createSessionCookie())
-          .send({ price: '' })
-          .expect(400),
-        request(app)
-          .put('/api/tickets')
-          .set('Cookie', global.createSessionCookie())
-          .send({ title: '', price: '' })
-          .expect(400),
-      ]);
-    });
-    it('does not update ticket if user does not own ticket', async () => {
-      const [cookie1, cookie2] = [
-        global.createSessionCookie(),
-        global.createSessionCookie(),
-      ];
-      const ticketRes = await createTicket(
-        { title: 'original', price: 1200 },
-        cookie1
-      );
-      await request(app)
-        .put('/api/tickets')
-        .set('Cookie', cookie2)
-        .send({ id: ticketRes.body.id, title: 'changedFailure' })
-        .expect(403);
-    });
-    it('updates ticket if user owns the ticket', async () => {
-      const cookie = global.createSessionCookie();
-      const ticketRes = await createTicket(
-        { title: 'original', price: 1200 },
-        cookie
-      );
-      const successRes = await request(app)
-        .put('/api/tickets')
-        .set('Cookie', cookie)
-        .send({ id: ticketRes.body.id, title: 'changedSuccess' })
-        .expect(200);
-      expect(successRes.body).toHaveProperty('title', 'changedSuccess');
-      expect(await Ticket.findById(ticketRes.body.id)).toHaveProperty(
-        'title',
-        'changedSuccess'
-      );
-    });
-  });
 });
 
 describe('/api/tickets/:id', () => {
@@ -228,6 +156,81 @@ describe('/api/tickets/:id', () => {
         .send()
         .expect(200);
       expect(getRes.body.id).toEqual(postRes.body.id);
+    });
+  });
+  describe('PUT', () => {
+    it('is only accessed by authenticated users', async () => {
+      await request(app)
+        .put('/api/tickets/' + new mongoose.Types.ObjectId())
+        .send({})
+        .expect(401);
+      const res = await request(app)
+        .put('/api/tickets')
+        .set('Cookie', global.createSessionCookie())
+        .send({});
+      expect(res.status).not.toEqual(401);
+    });
+    it('returns a 404 if invalid id', async () => {
+      await request(app)
+        .put('/api/tickets/' + new mongoose.Types.ObjectId())
+        .set('Cookie', global.createSessionCookie())
+        .send({ title: 'cat', price: 100 })
+        .expect(404);
+    });
+    it('returns a 400 if invalid title or price', async () => {
+      await Promise.all([
+        request(app)
+          .put('/api/tickets/' + new mongoose.Types.ObjectId())
+          .set('Cookie', global.createSessionCookie())
+          .send({ title: '' })
+          .expect(400),
+        request(app)
+          .put('/api/tickets/' + new mongoose.Types.ObjectId())
+          .set('Cookie', global.createSessionCookie())
+          .send({ price: '' })
+          .expect(400),
+        request(app)
+          .put('/api/tickets/' + new mongoose.Types.ObjectId())
+          .set('Cookie', global.createSessionCookie())
+          .send({ title: '', price: '' })
+          .expect(400),
+      ]);
+    });
+    it('does not update ticket if user does not own ticket', async () => {
+      const [cookie1, cookie2] = [
+        global.createSessionCookie(),
+        global.createSessionCookie(),
+      ];
+      const ticketRes = await createTicket(
+        { title: 'original', price: 1200 },
+        cookie1
+      );
+      await request(app)
+        .put('/api/tickets/' + ticketRes.body.id)
+        .set('Cookie', cookie2)
+        .send({ title: 'changedFailure' })
+        .expect(403);
+      expect(await Ticket.findById(ticketRes.body.id)).toHaveProperty(
+        'title',
+        'original'
+      );
+    });
+    it('updates ticket if user owns the ticket', async () => {
+      const cookie = global.createSessionCookie();
+      const ticketRes = await createTicket(
+        { title: 'original', price: 1200 },
+        cookie
+      );
+      const successRes = await request(app)
+        .put('/api/tickets/' + ticketRes.body.id)
+        .set('Cookie', cookie)
+        .send({ title: 'changedSuccess' })
+        .expect(200);
+      expect(successRes.body).toHaveProperty('title', 'changedSuccess');
+      expect(await Ticket.findById(ticketRes.body.id)).toHaveProperty(
+        'title',
+        'changedSuccess'
+      );
     });
   });
 });
