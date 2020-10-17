@@ -6,7 +6,8 @@ import {
   validateRequest,
 } from '@wkctickets/common/middleware';
 
-import { NotFoundError } from '@wkctickets/common/errors';
+import { Error as MongooseError } from 'mongoose';
+import { BadRequestError, NotFoundError } from '@wkctickets/common/errors';
 
 import { Ticket } from 'db';
 
@@ -45,9 +46,11 @@ router.get('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const ticket = await Ticket.findById(id);
-    if (ticket) {
-      res.status(200).send(ticket);
-    }
-  } catch (err) {}
+    if (ticket) res.status(200).send(ticket);
+  } catch (err) {
+    if (err instanceof MongooseError.CastError)
+      throw new BadRequestError('invalid ticket id');
+    throw err;
+  }
   throw new NotFoundError();
 });
