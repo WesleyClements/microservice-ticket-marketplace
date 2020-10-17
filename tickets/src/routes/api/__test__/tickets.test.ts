@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from 'app';
+import mongoose from 'mongoose';
 import { Ticket } from 'db';
 
 describe('/api/tickets', () => {
@@ -119,7 +120,10 @@ describe('/api/tickets', () => {
 describe('/api/tickets/:id', () => {
   describe('GET', () => {
     it('returns 404 if invalid id', async () => {
-      await request(app).get('/api/tickets/$').send().expect(404);
+      await request(app)
+        .get('/api/tickets/' + new mongoose.Types.ObjectId())
+        .send()
+        .expect(404);
     });
     it('returns a ticket if valid id', async () => {
       const postRes = await request(app)
